@@ -26,6 +26,8 @@ class User extends Authenticatable implements  HasTenants
      */
     protected $fillable = [
         'name',
+        'last_name',
+        'document_number',
         'email',
         'password',
     ];
