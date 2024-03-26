@@ -22,7 +22,7 @@ class UnitResource extends Resource
     protected static ?string $navigationIcon = 'fas-scale-balanced';
     protected static ?string $navigationGroup = 'Cadastros';
     protected static ?string $navigationLabel = 'Unidades e Medidas';
-    protected static ?string $modelLabel = 'Unidade e Medida';
+    protected static ?string $modelLabel = 'Unidade de medidas';
     protected static ?string $modelLabelPlural = "Unidades e Medidas";
     protected static ?int $navigationSort = 3;
     protected static bool $isScopedToTenant = false;
