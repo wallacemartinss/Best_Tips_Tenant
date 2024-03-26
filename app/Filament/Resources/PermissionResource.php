@@ -2,11 +2,10 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\RoleResource\Pages;
-use App\Filament\Resources\RoleResource\RelationManagers;
-use App\Models\Role;
+use App\Filament\Resources\PermissionResource\Pages;
+use App\Filament\Resources\PermissionResource\RelationManagers;
+use App\Models\Permission;
 use Filament\Forms;
-use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -14,27 +13,28 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class RoleResource extends Resource
+class PermissionResource extends Resource
 {
-    protected static ?string $model = Role::class;
-    protected static ?string $navigationIcon = 'fas-building-user';
+    protected static ?string $model = Permission::class;
+
+    protected static ?string $navigationIcon = 'fas-user-shield';
     protected static ?string $navigationGroup = 'Usúarios e Acessos';
-    protected static ?string $navigationLabel = 'Funções';
-    protected static ?string $modelLabel = 'Função';
-    protected static ?string $modelLabelPlural = "Funções";
-    protected static ?int $navigationSort = 2;
+    protected static ?string $navigationLabel = 'Permissões';
+    protected static ?string $modelLabel = 'Permissão';
+    protected static ?string $modelLabelPlural = "Permissões";
+    protected static ?int $navigationSort = 3;
     protected static bool $isScopedToTenant = false;
+
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-              
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),
-                Select::make('permission')
+                Forms\Components\Select::make('role')
                     ->multiple()
-                    ->relationship('permissions', 'name')
+                    ->relationship('roles', 'name')
                     ->searchable()
                     ->preload()
             ]);
@@ -44,7 +44,6 @@ class RoleResource extends Resource
     {
         return $table
             ->columns([
-               
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('guard_name')
@@ -75,7 +74,7 @@ class RoleResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ManageRoles::route('/'),
+            'index' => Pages\ManagePermissions::route('/'),
         ];
     }
 }

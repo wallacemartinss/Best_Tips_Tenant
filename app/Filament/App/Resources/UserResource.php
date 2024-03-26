@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Filament\Resources;
+namespace App\Filament\App\Resources;
 
-use App\Filament\Resources\UserResource\Pages;
-use App\Filament\Resources\UserResource\RelationManagers;
+use App\Filament\App\Resources\UserResource\Pages;
+use App\Filament\App\Resources\UserResource\RelationManagers;
 use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -17,34 +17,28 @@ class UserResource extends Resource
 {
     protected static ?string $model = User::class;
 
-    protected static ?string $navigationIcon = 'fas-users';
-    protected static ?string $navigationGroup = 'Usúarios e Acessos';
-    protected static ?string $navigationLabel = 'Usúarios';
-    protected static ?string $modelLabel = 'Usúario';
-    protected static ?string $modelLabelPlural = "Usúarios";
-    protected static ?int $navigationSort = 1;
-    protected static bool $isScopedToTenant = false;
+    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
                 Forms\Components\TextInput::make('name')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('email')
-                    ->email()
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('password')
-                    ->password()
-                    ->required()
-                    ->hiddenOn('edit')
-                    ->maxLength(255),
-                Forms\Components\Select::make('role')
-                    ->relationship('roles', 'name')
-                    ->multiple(),
-
+                ->required()
+                ->maxLength(255),
+            Forms\Components\TextInput::make('email')
+                ->email()
+                ->required()
+                ->maxLength(255),
+            Forms\Components\TextInput::make('password')
+                ->password()
+                ->required()
+                ->hiddenOn('edit')
+                ->maxLength(255),
+            Forms\Components\Select::make('role')
+                ->multiple()    
+                ->relationship('roles', 'name'),
+                
             ]);
     }
 
@@ -52,14 +46,23 @@ class UserResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('organization.name'),
                 Tables\Columns\TextColumn::make('name')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('last_name')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('document_number')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('email')
                     ->searchable(),
+                Tables\Columns\IconColumn::make('is_admin')
+                    ->boolean(),
                 Tables\Columns\TextColumn::make('email_verified_at')
                     ->dateTime()
                     ->sortable(),
+                Tables\Columns\TextColumn::make('avatar_url')
+                    ->searchable(),
+                Tables\Columns\IconColumn::make('active')
+                    ->boolean(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -74,7 +77,6 @@ class UserResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -83,10 +85,19 @@ class UserResource extends Resource
             ]);
     }
 
+    public static function getRelations(): array
+    {
+        return [
+            //
+        ];
+    }
+
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ManageUsers::route('/'),
+            'index' => Pages\ListUsers::route('/'),
+            'create' => Pages\CreateUser::route('/create'),
+            'edit' => Pages\EditUser::route('/{record}/edit'),
         ];
     }
 }
