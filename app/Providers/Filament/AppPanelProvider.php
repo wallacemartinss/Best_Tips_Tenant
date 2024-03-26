@@ -2,13 +2,14 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Pages\Auth\Register as AuthRegister;
 use Filament\Pages;
 use Filament\Panel;
 use Filament\Widgets;
 use Filament\PanelProvider;
 use App\Models\Organization;
 use Filament\Navigation\MenuItem;
-use Filament\Pages\Auth\Register;
+use App\Filament\Pages\Auth\Register;
 use Filament\Support\Colors\Color;
 use Filament\Http\Middleware\Authenticate;
 use Illuminate\Session\Middleware\StartSession;
