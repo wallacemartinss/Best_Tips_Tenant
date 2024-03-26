@@ -1,7 +1,7 @@
 <?php
 
 use App\Models\User;
-use App\Models\Tenant;
+use App\Models\Organization;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tenants', function (Blueprint $table) {
+        Schema::create('organizations', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->string('slug')->unique();
@@ -21,9 +21,9 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('tenant_user', function (Blueprint $table) {
+        Schema::create('organization_user', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Tenant::class)->index();
+            $table->foreignIdFor(Organization::class)->index();
             $table->foreignIdFor(User::class)->index();
             $table->timestamps();
         });
@@ -34,7 +34,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tenants');
-        Schema::dropIfExists('tenant_user');
+        Schema::dropIfExists('organizations');
+        Schema::dropIfExists('organization_user');
     }
 };

@@ -2,39 +2,35 @@
 
 namespace App\Filament\Resources;
 
+use App\Filament\Resources\RoleResource\Pages;
+use App\Filament\Resources\RoleResource\RelationManagers;
+use App\Models\Role;
 use Filament\Forms;
-use App\Models\Unit;
-use Filament\Tables;
 use Filament\Forms\Form;
-use Filament\Tables\Table;
 use Filament\Resources\Resource;
+use Filament\Tables;
+use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use App\Filament\Resources\UnitResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use App\Filament\Resources\UnitResource\RelationManagers;
-use App\Filament\Resources\UnitResource\RelationManagers\MensuresRelationManager;
 
-class UnitResource extends Resource
+class RoleResource extends Resource
 {
-    protected static ?string $model = Unit::class;
-    
-
-    protected static ?string $navigationIcon = 'fas-scale-balanced';
-    protected static ?string $navigationGroup = 'Cadastros';
-    protected static ?string $navigationLabel = 'Unidades e Medidas';
-    protected static ?string $modelLabel = 'Unidade e Medida';
-    protected static ?string $modelLabelPlural = "Unidades e Medidas";
-    protected static ?int $navigationSort = 3;
+    protected static ?string $model = Role::class;
     protected static bool $isScopedToTenant = false;
+
+    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
+                Forms\Components\TextInput::make('tenant_id')
+                    ->numeric(),
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('description')
+                Forms\Components\TextInput::make('guard_name')
+                    ->required()
                     ->maxLength(255),
             ]);
     }
@@ -43,9 +39,12 @@ class UnitResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\TextColumn::make('tenant_id')
+                    ->numeric()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('description')
+                Tables\Columns\TextColumn::make('guard_name')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
@@ -70,19 +69,10 @@ class UnitResource extends Resource
             ]);
     }
 
-    public static function getRelations(): array
-    {
-        return [
-            MensuresRelationManager::class
-        ];
-    }
-
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListUnits::route('/'),
-            'create' => Pages\CreateUnit::route('/create'),
-            'edit' => Pages\EditUnit::route('/{record}/edit'),
+            'index' => Pages\ManageRoles::route('/'),
         ];
     }
 }

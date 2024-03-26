@@ -18,7 +18,8 @@ use App\Filament\Resources\CompanyTypeResource\RelationManagers\SocialTaxesRelat
 class CompanyTypeResource extends Resource
 {
     protected static ?string $model = CompanyType::class;
-
+    protected static bool $isScopedToTenant = false;
+    
     protected static ?string $navigationIcon = 'fas-file-invoice-dollar';
     protected static ?string $navigationGroup = 'Cadastros';
     protected static ?string $navigationLabel = 'Regime Tributário';

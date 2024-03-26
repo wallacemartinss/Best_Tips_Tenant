@@ -17,6 +17,7 @@ use App\Filament\Resources\PlanResource\RelationManagers\DetailplanRelationManag
 class PlanResource extends Resource
 {
     protected static ?string $model = Plan::class;
+    protected static bool $isScopedToTenant = false;
 
     protected static ?string $navigationIcon = 'fas-file-signature';
     protected static ?string $navigationGroup = 'Cadastros';
@@ -24,7 +25,7 @@ class PlanResource extends Resource
     protected static ?string $modelLabel = 'Plano';
     protected static ?string $modelLabelPlural = "Planos";
     protected static ?int $navigationSort = 1;
-    protected static bool $isScopedToTenant = false;
+
 
 
     public static function form(Form $form): Form

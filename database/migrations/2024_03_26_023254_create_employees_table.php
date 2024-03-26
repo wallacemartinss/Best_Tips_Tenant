@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('employees', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('tenant_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('organization_id')->constrained()->cascadeOnDelete();
             $table->foreignId('company_id')->constrained()->cascadeOnDelete();
             $table->foreignId('departament_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('contract_id')->constrained();
+            $table->foreignId('work_contract_id')->constrained();
             $table->string('document_number')->unique();
             $table->string('frist_name');
             $table->string('last_name');

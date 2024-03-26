@@ -5,10 +5,14 @@ namespace App\Providers\Filament;
 use Filament\Pages;
 use Filament\Panel;
 use Filament\Widgets;
+use Stripe\Tax\Settings;
 use Filament\PanelProvider;
+use App\Models\Organization;
 use Filament\Navigation\MenuItem;
+use Filament\Pages\Auth\Register;
 use Filament\Support\Colors\Color;
 use Filament\Http\Middleware\Authenticate;
+use App\Filament\Pages\Tenancy\RegisterOrganization;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Routing\Middleware\SubstituteBindings;
@@ -27,14 +31,12 @@ class AdminPanelProvider extends PanelProvider
             ->default()
             ->id('admin')
             ->path('admin')
+            ->tenantRoutePrefix('organization')
             ->login()
+            ->registration(Register::class)
+            ->databaseNotifications()
             ->sidebarFullyCollapsibleOnDesktop()
-            ->userMenuItems([
-        MenuItem::make()
-                ->label('Aplicativo')
-                ->icon('heroicon-o-cog-6-tooth')
-                ->url('/app')
-            ])
+            
             ->font('Inter')
             ->colors([
                 'danger' => Color::Rose,
@@ -67,6 +69,9 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
-            ]);
+            ])
+
+            ->tenant(Organization::class, ownershipRelationship: 'organization', slugAttribute: 'slug')
+            ->tenantRegistration(RegisterOrganization::class);
     }
 }
