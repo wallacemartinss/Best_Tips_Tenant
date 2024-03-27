@@ -13,6 +13,7 @@ use Filament\Models\Contracts\HasTenants;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class User extends Authenticatable implements HasTenants
 {
@@ -68,4 +69,5 @@ class User extends Authenticatable implements HasTenants
     {
         return $this->organization()->whereKey($organization)->exists();
     }
+  
 }
