@@ -3,8 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Filament\Models\Contracts\HasCurrentTenantLabel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Organization extends Model implements HasCurrentTenantLabel
@@ -27,4 +30,9 @@ class Organization extends Model implements HasCurrentTenantLabel
     {
         return $this->belongsToMany(User::class);
     }
+    public function companies(): HasMany
+    {
+        return $this->HasMany(company::class);
+    }
+    
 }

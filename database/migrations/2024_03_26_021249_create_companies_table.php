@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('fantasy_name')->nullable();
             $table->string('document_number')->unique();
             $table->string('phone_number');
-            $table->string('emmail')->unique();
+            $table->string('email')->unique();
             $table->timestamps();
         });
     }

@@ -22,8 +22,15 @@ class UserResource extends Resource
     public static function form(Form $form): Form
     {
         return $form
+
             ->schema([
-                Forms\Components\TextInput::make('name')
+            Forms\Components\TextInput::make('name')
+                ->required()
+                ->maxLength(255),
+            Forms\Components\TextInput::make('last_name')
+                ->required()
+                ->maxLength(255),
+            Forms\Components\TextInput::make('document_number')
                 ->required()
                 ->maxLength(255),
             Forms\Components\TextInput::make('email')
