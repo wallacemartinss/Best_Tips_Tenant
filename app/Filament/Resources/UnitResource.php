@@ -24,7 +24,7 @@ class UnitResource extends Resource
     protected static ?string $navigationLabel = 'Unidades e Medidas';
     protected static ?string $modelLabel = 'Unidade de medidas';
     protected static ?string $modelLabelPlural = "Unidades e Medidas";
-    protected static ?int $navigationSort = 3;
+    protected static ?int $navigationSort = 4;
     protected static bool $isScopedToTenant = false;
 
     public static function form(Form $form): Form
