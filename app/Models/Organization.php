@@ -34,5 +34,8 @@ class Organization extends Model implements HasCurrentTenantLabel
     {
         return $this->HasMany(company::class);
     }
-    
+    public function company_address(): HasMany
+    {
+        return $this->hasMany(CompanyAddress::class);
+    }
 }

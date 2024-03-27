@@ -7,46 +7,62 @@ use Filament\Forms\Form;
 use Filament\Pages\Page;
 use App\Models\CompanyType;
 use Filament\Actions\Action;
+use App\Models\CompanyAddress;
 use Filament\Facades\Filament;
 use Filament\Forms\Components\Select;
 use Filament\Support\Exceptions\Halt;
 use Filament\Forms\Contracts\HasForms;
+use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
-use Leandrocfe\FilamentPtbrFormFields\Document;
-use Leandrocfe\FilamentPtbrFormFields\PhoneNumber;
 use Leandrocfe\FilamentPtbrFormFields\Cep;
 use Filament\Forms\Concerns\InteractsWithForms;
-use Filament\Forms\Components\Fieldset;
+use Leandrocfe\FilamentPtbrFormFields\Document;
+use Leandrocfe\FilamentPtbrFormFields\PhoneNumber;
 
 class MyCompany extends Page implements HasForms
 {
     use InteractsWithForms;
 
-    public ?array $data = [];
+    public ?array $companyformData = [];
+    public ?array $companyaddressData = [];
     protected static ?string $model = Company::class;
     protected static string $view = 'filament.app.pages.my-company';
 
-    protected static bool $isScopedToTenant = false;
+    protected static bool $isScopedToTenant = true;
 
     protected static ?string $navigationIcon = 'fas-building';
     protected static ?string $navigationGroup = 'Configurações';
     protected static ?string $navigationLabel = 'Minha Empresa';
     protected static ?int $navigationSort = 1;
 
+    protected function getForms(): array
+    {
+        return [
+            'Company',
+            'Companyaddress',
+        ];
+    }
+
+
+
     public function mount(): void
     {
         $tenant = Filament::getTenant();
-        $companyId = $tenant->id;
-        $validation = Company::where('organization_id', $companyId)->first();
+        $organization_id = $tenant->id;
+        $validation = Company::where('organization_id', $organization_id)->first();
+      
 
         if ($validation === null) {
-            $this->form->fill();
+            $this->Company->fill();
+            $this->Companyaddress->fill();
+          
         } else {
-            $this->data = Company::where('organization_id', $companyId)->first()->attributesToArray();
+            $this->companyformData = Company::where('organization_id', $organization_id)->first()->attributesToArray();
+            $this->companyaddressData = CompanyAddress::where('organization_id', $organization_id)->first()->attributesToArray();
         }
     }
-    public function form(Form $form): Form
+    public function Company(Form $form): Form
     {
         return $form
             ->schema([
@@ -87,8 +103,57 @@ class MyCompany extends Page implements HasForms
                         ->maxLength(255),
                 ])->columns(3),
             ])
-            ->statePath('data');
+            ->statePath('companyformData');
     }
+
+    public function Companyaddress(Form $form): Form
+    {
+        return $form
+            ->schema([
+                Fieldset::make('Endereço da Empresa')
+                ->schema([
+                    Cep::make('zip_code')
+                    ->label('CEP')
+                    ->required()
+                    ->live(onBlur: true)
+                    ->viaCep(
+                        mode: 'suffix',
+                        errorMessage: 'CEP inválido.', 
+                        setFields: [
+                            'street' => 'logradouro',
+                            'number' => 'numero',
+                            'complement' => 'complemento',
+                            'district' => 'bairro',
+                            'city' => 'localidade',
+                            'state' => 'uf'
+                        ]
+                    ),
+                 
+                TextInput::make('street')
+                    ->label('Logradouro')
+                    ->required()
+                    ->maxLength(255),
+                TextInput::make('number')
+                    ->label('Número')
+                    ->required(),
+                TextInput::make('complement')
+                    ->label('Complemento'),
+                TextInput::make('district')
+                    ->label('Bairro')
+                    ->required(),
+                TextInput::make('city')
+                    ->label('Cidade')
+                    ->required(),
+                TextInput::make('state')
+                    ->label('Estado')
+                    ->required(),
+                TextInput::make('reference')
+                    ->label('Ponto de Referência'),
+                ])->columns(3),
+            ])
+            ->statePath('companyaddressData');
+    }
+
     protected function getFormActions(): array
     {
         return [
@@ -99,23 +164,47 @@ class MyCompany extends Page implements HasForms
     }
     public function save(): void
     {
-        $data = $this->form->getState();
+        $datacompany = $this->Company->getState();
+        $companyaddressData = $this->Companyaddress->getState();
         $tenant = Filament::getTenant();
-        $companyId = $tenant->id;
 
-        $validation = Company::where('organization_id', $companyId)->first();
-        $array1 = array("organization_id" => $companyId);
-
+        $organization_id = $tenant->id;
+        $validation = Company::where('organization_id', $organization_id)->first();
+        
         if ($validation === null) {
             try {
-                $data = array_merge($array1, $data);
-                Company::where('organization_id', $companyId)->create($data);
+
+                //Criação do Array de dados para inserir na tabela Company
+                $company_array = array("organization_id" => $organization_id);
+                $datacompany = array_merge($company_array, $datacompany);
+
+                //Insere os dados na tabela Company
+                Company::where('organization_id', $organization_id)->create($datacompany);
+               
+                //query para buscar o id da empresa
+                $id_company = Company::where('organization_id', $organization_id)->first();
+                $id_company = $id_company->id;
+
+                //Criação do Array de dados para inserir na tabela CompanyAddress
+                $adress_array = array("organization_id" => $organization_id, "company_id" => $id_company);
+                $companyaddressData = array_merge($adress_array, $companyaddressData);
+                CompanyAddress::where('organization_id', $organization_id)->create($companyaddressData);
+
             } catch (Halt $exception) {
                 return;
             }
         } else {
             try {
-                Company::where('organization_id', $companyId)->update($data);
+                Company::where('organization_id', $organization_id)->update($datacompany);
+
+                $id_company = Company::where('organization_id', $organization_id)->first();
+                $id_company = $id_company->id;
+                $adress_array = array("organization_id" => $organization_id, "company_id" => $id_company);
+                $companyaddressData = array_merge($adress_array, $companyaddressData);
+
+                CompanyAddress::where('company_id', $id_company)->update($companyaddressData);
+                
+                
             } catch (Halt $exception) {
                 return;
             }
