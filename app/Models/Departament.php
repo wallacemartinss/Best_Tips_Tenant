@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 class Departament extends Model
 {
@@ -20,17 +22,17 @@ class Departament extends Model
     ];
     public function organization(): BelongsTo
     {
-        return $this->BelongsTo(Organization::class);
+        return $this->belongsTo(Organization::class);
     }
     
-    public function sectors(): BelongsTo
+    public function company(): HasMany
+    {
+        return $this->hasMany(Company::class);
+    }
+    public function sector(): BelongsTo
     {
         return $this->BelongsTo(Sector::class);
     }
 
-    public function companies(): BelongsTo
-    {
-        return $this->BelongsTo(company::class);
-    }
 
 }

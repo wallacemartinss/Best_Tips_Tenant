@@ -5,41 +5,57 @@ namespace App\Filament\App\Resources;
 use Filament\Forms;
 use Filament\Tables;
 use App\Models\Sector;
+use App\Models\Company;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use App\Models\Departament;
+use Filament\Facades\Filament;
 use Filament\Resources\Resource;
 use Filament\Forms\Components\Select;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\App\Resources\DepartamentResource\Pages;
-use App\Filament\App\Resources\DepartamentResource\RelationManagers;
 
 class DepartamentResource extends Resource
 {
     protected static ?string $model = Departament::class;
-
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'fas-building-user';
+    protected static ?string $navigationGroup = 'Configurações';
+    protected static ?string $navigationLabel = 'Departamentos';
+    protected static ?string $modelLabel = 'Departamento';
+    protected static ?string $modelLabelPlural = "Departamentos";
+    protected static ?int $navigationSort = 2;
+    protected static bool $isScopedToTenant = true;
 
     public static function form(Form $form): Form
     {
+
+        $tenant = Filament::getTenant();
+        $tenant = $tenant->id;
+
         return $form
             ->schema([
            
-         
+
                 Select::make('sector_id')
-                    ->label('Tipo de empresa')
+                    ->label('Tipo de Setor')
                     ->options(Sector::all()->pluck('name', 'id'))
                     ->searchable()
                     ->preload(),
 
+                Select::make('company_id')
+                    ->label('Minha Empresa')
+                    ->options(Company::where('organization_id', $tenant)->pluck('name', 'id'))
+                    ->searchable()
+                    ->preload(),
+
                 Forms\Components\TextInput::make('name')
+                    ->label('Tipo de Setor')
                     ->required()
                     ->maxLength(255),
+
                 Forms\Components\TextInput::make('description')
+                    ->label('Descrição do Setor')
                     ->maxLength(255),
-                Forms\Components\Toggle::make('active')
-                    ->required(),
+            
             ]);
     }
 
@@ -47,13 +63,8 @@ class DepartamentResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('organization_id')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('sector_id')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('company_id')
+               
+                Tables\Columns\TextColumn::make('sector.name')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('name')
