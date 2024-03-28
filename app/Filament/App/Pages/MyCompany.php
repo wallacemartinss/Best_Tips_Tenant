@@ -28,13 +28,11 @@ class MyCompany extends Page implements HasForms
     public ?array $companyaddressData = [];
     protected static ?string $model = Company::class;
     protected static string $view = 'filament.app.pages.my-company';
-
-    protected static bool $isScopedToTenant = true;
-
     protected static ?string $navigationIcon = 'fas-building';
     protected static ?string $navigationGroup = 'Configurações';
     protected static ?string $navigationLabel = 'Minha Empresa';
     protected static ?int $navigationSort = 1;
+    protected static bool $isScopedToTenant = true;
 
     protected function getForms(): array
     {
@@ -44,19 +42,16 @@ class MyCompany extends Page implements HasForms
         ];
     }
 
-
-
     public function mount(): void
     {
         $tenant = Filament::getTenant();
         $organization_id = $tenant->id;
         $validation = Company::where('organization_id', $organization_id)->first();
-      
+
 
         if ($validation === null) {
             $this->Company->fill();
             $this->Companyaddress->fill();
-          
         } else {
             $this->companyformData = Company::where('organization_id', $organization_id)->first()->attributesToArray();
             $this->companyaddressData = CompanyAddress::where('organization_id', $organization_id)->first()->attributesToArray();
@@ -67,41 +62,41 @@ class MyCompany extends Page implements HasForms
         return $form
             ->schema([
                 Fieldset::make('Enquadramento e Documento')
-                ->schema([
-                    Select::make('company_type_id')
-                        ->label('Tipo de empresa')
-                        ->options(CompanyType::all()->pluck('name', 'id'))
-                        ->searchable()
-                        ->preload(),
+                    ->schema([
+                        Select::make('company_type_id')
+                            ->label('Tipo de empresa')
+                            ->options(CompanyType::all()->pluck('name', 'id'))
+                            ->searchable()
+                            ->preload(),
 
-                    Document::make('document_number')
-                        ->label('CNPJ da Empresa ou CPF caso não tenha CNPJ')
-                        ->dynamic()
-                        ->required()
-                        ->validation(false)
-                        ->maxLength(255),
+                        Document::make('document_number')
+                            ->label('CNPJ da Empresa ou CPF caso não tenha CNPJ')
+                            ->dynamic()
+                            ->required()
+                            ->validation(false)
+                            ->maxLength(255),
 
-                ])->columns(2),
+                    ])->columns(2),
 
                 Fieldset::make('Dados da Empresa')
-                ->schema([
-                    TextInput::make('name')
-                        ->label('Razão Social')
-                        ->maxLength(255),
-                    TextInput::make('fantasy_name')
-                        ->label('Nome Fantasia')
-                        ->maxLength(255),
-                    PhoneNumber::make('phone_number')
-                        ->label('Telefone')
-                        ->format('(99)99999-9999')
-                        ->required()
-                        ->maxLength(255),
-                    TextInput::make('email')
-                        ->label('E-mail')
-                        ->email()
-                        ->required()
-                        ->maxLength(255),
-                ])->columns(3),
+                    ->schema([
+                        TextInput::make('name')
+                            ->label('Razão Social')
+                            ->maxLength(255),
+                        TextInput::make('fantasy_name')
+                            ->label('Nome Fantasia')
+                            ->maxLength(255),
+                        PhoneNumber::make('phone_number')
+                            ->label('Telefone')
+                            ->format('(99)99999-9999')
+                            ->required()
+                            ->maxLength(255),
+                        TextInput::make('email')
+                            ->label('E-mail')
+                            ->email()
+                            ->required()
+                            ->maxLength(255),
+                    ])->columns(3),
             ])
             ->statePath('companyformData');
     }
@@ -111,45 +106,45 @@ class MyCompany extends Page implements HasForms
         return $form
             ->schema([
                 Fieldset::make('Endereço da Empresa')
-                ->schema([
-                    Cep::make('zip_code')
-                    ->label('CEP')
-                    ->required()
-                    ->live(onBlur: true)
-                    ->viaCep(
-                        mode: 'suffix',
-                        errorMessage: 'CEP inválido.', 
-                        setFields: [
-                            'street' => 'logradouro',
-                            'number' => 'numero',
-                            'complement' => 'complemento',
-                            'district' => 'bairro',
-                            'city' => 'localidade',
-                            'state' => 'uf'
-                        ]
-                    ),
-                 
-                TextInput::make('street')
-                    ->label('Logradouro')
-                    ->required()
-                    ->maxLength(255),
-                TextInput::make('number')
-                    ->label('Número')
-                    ->required(),
-                TextInput::make('complement')
-                    ->label('Complemento'),
-                TextInput::make('district')
-                    ->label('Bairro')
-                    ->required(),
-                TextInput::make('city')
-                    ->label('Cidade')
-                    ->required(),
-                TextInput::make('state')
-                    ->label('Estado')
-                    ->required(),
-                TextInput::make('reference')
-                    ->label('Ponto de Referência'),
-                ])->columns(3),
+                    ->schema([
+                        Cep::make('zip_code')
+                            ->label('CEP')
+                            ->required()
+                            ->live(onBlur: true)
+                            ->viaCep(
+                                mode: 'suffix',
+                                errorMessage: 'CEP inválido.',
+                                setFields: [
+                                    'street' => 'logradouro',
+                                    'number' => 'numero',
+                                    'complement' => 'complemento',
+                                    'district' => 'bairro',
+                                    'city' => 'localidade',
+                                    'state' => 'uf'
+                                ]
+                            ),
+
+                        TextInput::make('street')
+                            ->label('Logradouro')
+                            ->required()
+                            ->maxLength(255),
+                        TextInput::make('number')
+                            ->label('Número')
+                            ->required(),
+                        TextInput::make('complement')
+                            ->label('Complemento'),
+                        TextInput::make('district')
+                            ->label('Bairro')
+                            ->required(),
+                        TextInput::make('city')
+                            ->label('Cidade')
+                            ->required(),
+                        TextInput::make('state')
+                            ->label('Estado')
+                            ->required(),
+                        TextInput::make('reference')
+                            ->label('Ponto de Referência'),
+                    ])->columns(3),
             ])
             ->statePath('companyaddressData');
     }
@@ -170,7 +165,7 @@ class MyCompany extends Page implements HasForms
 
         $organization_id = $tenant->id;
         $validation = Company::where('organization_id', $organization_id)->first();
-        
+
         if ($validation === null) {
             try {
 
@@ -180,7 +175,7 @@ class MyCompany extends Page implements HasForms
 
                 //Insere os dados na tabela Company
                 Company::where('organization_id', $organization_id)->create($datacompany);
-               
+
                 //query para buscar o id da empresa
                 $id_company = Company::where('organization_id', $organization_id)->first();
                 $id_company = $id_company->id;
@@ -189,7 +184,6 @@ class MyCompany extends Page implements HasForms
                 $adress_array = array("organization_id" => $organization_id, "company_id" => $id_company);
                 $companyaddressData = array_merge($adress_array, $companyaddressData);
                 CompanyAddress::where('organization_id', $organization_id)->create($companyaddressData);
-
             } catch (Halt $exception) {
                 return;
             }
@@ -203,8 +197,6 @@ class MyCompany extends Page implements HasForms
                 $companyaddressData = array_merge($adress_array, $companyaddressData);
 
                 CompanyAddress::where('company_id', $id_company)->update($companyaddressData);
-                
-                
             } catch (Halt $exception) {
                 return;
             }

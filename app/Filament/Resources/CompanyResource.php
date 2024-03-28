@@ -2,16 +2,14 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\CompanyResource\Pages;
-use App\Filament\Resources\CompanyResource\RelationManagers;
-use App\Models\Company;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
 use Filament\Tables;
+use App\Models\Company;
+use Filament\Forms\Form;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Resources\Resource;
+use App\Filament\Resources\CompanyResource\Pages;
+use App\Filament\Resources\CompanyResource\RelationManagers\CompanyAddressRelationManager;
 
 class CompanyResource extends Resource
 {
@@ -58,21 +56,28 @@ class CompanyResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('organization.name')
+          Tables\Columns\TextColumn::make('organization.name')
+                    ->label('Tenant')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('company_type.name')
+                    ->label('Tipo de Empresa')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('name')
+                    ->label('Razão Social')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('fantasy_name')
+                    ->label('Nome Fantasia')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('document_number')
+                    ->label('Número de DOcumento')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('phone_number')
+                    ->label('Telefone')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('email')
+                    ->label('E-mail')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
@@ -99,7 +104,8 @@ class CompanyResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            CompanyAddressRelationManager::class,
+              
         ];
     }
 
