@@ -12,6 +12,9 @@ use App\Models\Departament;
 use Filament\Facades\Filament;
 use Filament\Resources\Resource;
 use Filament\Forms\Components\Select;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Forms\Components\TextInput;
+use Filament\Tables\Columns\ToggleColumn;
 use App\Filament\App\Resources\DepartamentResource\Pages;
 
 class DepartamentResource extends Resource
@@ -64,20 +67,27 @@ class DepartamentResource extends Resource
         return $table
             ->columns([
                
-                Tables\Columns\TextColumn::make('sector.name')
+                TextColumn::make('sector.name')
+                    ->label('Tipo de Setor')
+                    ->searchable()
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('name')
+                TextColumn::make('name')
+                    ->label('Nome do Setor')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('description')
+                TextColumn::make('description')
+                    ->label('Descrição do Setor')
                     ->searchable(),
-                Tables\Columns\IconColumn::make('active')
+                ToggleColumn::make('active')
+                    ->label('Ativo')
                     ->boolean(),
-                Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('created_at')
+                    ->label('Criado em')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
+                TextColumn::make('updated_at')
+                    ->label('Atualizado em')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),

@@ -2,16 +2,20 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\UserResource\Pages;
-use App\Filament\Resources\UserResource\RelationManagers;
+
 use App\Models\User;
-use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Forms\Form;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Resources\Resource;
+use Filament\Tables\Columns\Column;
+use Filament\Forms\Components\Select;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Forms\Components\TextInput;
+use Filament\Tables\Columns\ToggleColumn;
+use App\Filament\Resources\UserResource\Pages;
+use Leandrocfe\FilamentPtbrFormFields\Document;
+
 
 class UserResource extends Resource
 {
@@ -29,21 +33,38 @@ class UserResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('name')
+                Select::make('organization_id')
+                ->label('Tenant')
+                ->relationship('organization', 'name')
+                ->required(),
+                TextInput::make('name')
+                    ->label('Primeiro Nome')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('email')
+                TextInput::make('last_name')
+                    ->label('Sobrenome')
+                    ->required()
+                    ->maxLength(255),
+                Document::make('document_number')
+                    ->label('CPF')
+                    ->validation(false)
+                    ->required()
+                    ->maxLength(255),
+                TextInput::make('email')
+                    ->label('E-mail')
                     ->email()
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('password')
+                TextInput::make('password')
+                    ->label('Senha')
                     ->password()
                     ->required()
                     ->hiddenOn('edit')
                     ->maxLength(255),
-                Forms\Components\Select::make('role')
-                    ->relationship('roles', 'name')
-                    ->multiple(),
+                Select::make('role')
+                    ->label('Permissão')
+                    ->multiple()
+                    ->relationship('roles', 'name'),
 
             ]);
     }
@@ -52,19 +73,37 @@ class UserResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('organization.name'),
-                Tables\Columns\TextColumn::make('name')
+
+                TextColumn::make('organization.name')
+                    ->label('Tenant')
+                    ->sortable()
                     ->searchable(),
-                Tables\Columns\TextColumn::make('email')
+                TextColumn::make('name')
+                    ->label('Primeiro Nome')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('email_verified_at')
-                    ->dateTime()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('last_name')
+                    ->label('Sobrenome')
+                    ->searchable(),
+                TextColumn::make('document_number')
+                    ->label('CPF')
+                    ->searchable(),
+                TextColumn::make('email')
+                    ->label('E-mail')
+                    ->searchable(),
+                ToggleColumn::make('active')
+                    ->label('Ativo'),
+                TextColumn::make('email_verified_at')
+                    ->label('Verificado')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
+                TextColumn::make('created_at')
+                    ->label('Criado em')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                textColumn::make('updated_at')
+                    ->label('Atualizado em')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),

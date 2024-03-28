@@ -21,7 +21,7 @@ class PermissionResource extends Resource
     protected static ?string $navigationGroup = 'Usúarios e Acessos';
     protected static ?string $navigationLabel = 'Permissões';
     protected static ?string $modelLabel = 'Permissão';
-    protected static ?string $modelLabelPlural = "Permissões";
+    protected static ?string $modelLabelPlural = "permissões";
     protected static ?int $navigationSort = 3;
     protected static bool $isScopedToTenant = false;
 

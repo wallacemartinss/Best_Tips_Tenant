@@ -31,6 +31,8 @@ class MyCompany extends Page implements HasForms
     protected static ?string $navigationIcon = 'fas-building';
     protected static ?string $navigationGroup = 'Configurações';
     protected static ?string $navigationLabel = 'Minha Empresa';
+    protected static ?string $modelLabel = 'Minha Empresa';
+    protected static ?string $modelLabelPlural = "Minha Empresa";
     protected static ?int $navigationSort = 1;
     protected static bool $isScopedToTenant = true;
 
@@ -72,10 +74,8 @@ class MyCompany extends Page implements HasForms
                         Document::make('document_number')
                             ->label('CNPJ da Empresa ou CPF caso não tenha CNPJ')
                             ->dynamic()
-                            ->required()
                             ->validation(false)
-                            ->maxLength(255),
-
+                            ->required(),
                     ])->columns(2),
 
                 Fieldset::make('Dados da Empresa')

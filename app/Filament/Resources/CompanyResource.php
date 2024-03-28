@@ -2,13 +2,17 @@
 
 namespace App\Filament\Resources;
 
-use Filament\Forms;
 use Filament\Tables;
 use App\Models\Company;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
+use Filament\Forms\Components\Select;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Forms\Components\TextInput;
+use Leandrocfe\FilamentPtbrFormFields\Document;
 use App\Filament\Resources\CompanyResource\Pages;
+use Leandrocfe\FilamentPtbrFormFields\PhoneNumber;
 use App\Filament\Resources\CompanyResource\RelationManagers\CompanyAddressRelationManager;
 
 class CompanyResource extends Resource
@@ -27,25 +31,32 @@ class CompanyResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Select::make('organization_id')
+                Select::make('organization_id')
+                    ->label('Tenant')
                     ->relationship('organization', 'name')
                     ->required(),
-                Forms\Components\Select::make('company_type_id')
+                Select::make('company_type_id')
+                    ->label('Tipo de Empresa')
                     ->relationship('company_type', 'name')
                     ->required(),
-                Forms\Components\TextInput::make('name')
+                TextInput::make('name')
+                    ->label('Razão Social')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('fantasy_name')
+                TextInput::make('fantasy_name')
+                    ->label('Nome Fantasia')
                     ->maxLength(255),
-                Forms\Components\TextInput::make('document_number')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('phone_number')
-                    ->tel()
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('email')
+                Document::make('document_number')
+                    ->label('CNPJ da Empresa ou CPF caso não tenha CNPJ')
+                    ->dynamic()
+                    ->validation(false)
+                    ->required(),
+                PhoneNumber::make('phone_number')
+                ->label('Telefone')
+                        ->format('(99)99999-9999')
+                ->required(),
+                TextInput::make('email')
+                    ->label('E-mail')
                     ->email()
                     ->required()
                     ->maxLength(255),
@@ -56,34 +67,34 @@ class CompanyResource extends Resource
     {
         return $table
             ->columns([
-          Tables\Columns\TextColumn::make('organization.name')
+                TextColumn::make('organization.name')
                     ->label('Tenant')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('company_type.name')
+                TextColumn::make('company_type.name')
                     ->label('Tipo de Empresa')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('name')
+                TextColumn::make('name')
                     ->label('Razão Social')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('fantasy_name')
+                TextColumn::make('fantasy_name')
                     ->label('Nome Fantasia')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('document_number')
+                TextColumn::make('document_number')
                     ->label('Número de DOcumento')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('phone_number')
+                TextColumn::make('phone_number')
                     ->label('Telefone')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('email')
+                TextColumn::make('email')
                     ->label('E-mail')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
+                TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
