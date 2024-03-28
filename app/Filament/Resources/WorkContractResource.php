@@ -2,24 +2,24 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\PermissionResource\Pages;
-use App\Models\Permission;
+use App\Filament\Resources\WorkContractResource\Pages;
+use App\Models\WorkContract;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 
-class PermissionResource extends Resource
+class WorkContractResource extends Resource
 {
-    protected static ?string $model = Permission::class;
+    protected static ?string $model = WorkContract::class;
 
-    protected static ?string $navigationIcon = 'fas-user-shield';
-    protected static ?string $navigationGroup = 'Usúarios e Acessos';
-    protected static ?string $navigationLabel = 'Permissões';
-    protected static ?string $modelLabel = 'Permissão';
-    protected static ?string $modelLabelPlural = "permissões";
-    protected static ?int $navigationSort = 3;
+    protected static ?string $navigationIcon = 'fas-file-contract';
+    protected static ?string $navigationGroup = 'Cadastros';
+    protected static ?string $navigationLabel = 'Contratos de Trabalho';
+    protected static ?string $modelLabel = 'Contrato de Trabalho';
+    protected static ?string $modelLabelPlural = "Contratos de Trabalho";
+    protected static ?int $navigationSort = 5;
     protected static bool $isScopedToTenant = false;
 
     public static function form(Form $form): Form
@@ -27,13 +27,15 @@ class PermissionResource extends Resource
         return $form
             ->schema([
                 Forms\Components\TextInput::make('name')
+                    ->label('Nome')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\Select::make('role')
-                    ->multiple()
-                    ->relationship('roles', 'name')
-                    ->searchable()
-                    ->preload()
+                Forms\Components\TextInput::make('description')
+                    ->label('Descricão')
+                    ->maxLength(255),
+                Forms\Components\Toggle::make('active')
+                    ->label('Ativo')
+                    ->required(),
             ]);
     }
 
@@ -43,8 +45,10 @@ class PermissionResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('guard_name')
+                Tables\Columns\TextColumn::make('description')
                     ->searchable(),
+                Tables\Columns\IconColumn::make('active')
+                    ->boolean(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -71,7 +75,7 @@ class PermissionResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ManagePermissions::route('/'),
+            'index' => Pages\ManageWorkContracts::route('/'),
         ];
     }
 }

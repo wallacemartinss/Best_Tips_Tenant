@@ -79,8 +79,7 @@ class DepartamentResource extends Resource
                     ->label('Descrição do Setor')
                     ->searchable(),
                 ToggleColumn::make('active')
-                    ->label('Ativo')
-                    ->boolean(),
+                    ->label('Ativo'),
                 TextColumn::make('created_at')
                     ->label('Criado em')
                     ->dateTime()

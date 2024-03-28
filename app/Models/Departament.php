@@ -6,9 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasManyThrough;
-
 class Departament extends Model
 {
     use HasFactory;
@@ -31,8 +28,11 @@ class Departament extends Model
     }
     public function sector(): BelongsTo
     {
-        return $this->BelongsTo(Sector::class);
+        return $this->BelongsTo(Sector::class);     
     }
-
+    public function employee(): HasMany
+    {
+        return $this->hasMany(Employee::class);
+    }
 
 }
