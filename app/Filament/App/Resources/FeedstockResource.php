@@ -25,6 +25,8 @@ use App\Filament\App\Resources\FeedstockResource\RelationManagers;
 use App\Filament\App\Resources\FeedstockResource\Pages\EditFeedstock;
 use App\Filament\App\Resources\FeedstockResource\Pages\ListFeedstocks;
 use App\Filament\App\Resources\FeedstockResource\Pages\CreateFeedstock;
+use Leandrocfe\FilamentPtbrFormFields\Money;
+
 
 class FeedstockResource extends Resource
 {
@@ -83,20 +85,27 @@ class FeedstockResource extends Resource
                     ->required(),
 
                     Select::make('mensures_id')
-                        ->Label('Medida')
+                        ->Label('Medida Comprada')
                         ->options(fn (Get $get): Collection => Mensure::query()->where('unit_id', $get('units_id'))->pluck('simbol', 'id'))
                         ->searchable()
                         ->preload()
-                        ->required(),
+                        ->required()
+                        ->live(),
+                        
+                    
 
                     TextInput::make('quantity')
                         ->label('Quantidade')
+                        ->suffix( function (Get $get) {
+                            $simbol = Mensure::query()->where('id', $get('mensures_id'));
+                            return $simbol->value('simbol');                             
+                        })
                         ->required()
                         ->numeric(),
                     
-                    TextInput::make('value')
-                        ->required()
-                        ->numeric(),
+                    Money::make('value')
+                        ->label('Valor pago no produto')
+                        ->required(),
 
                 ]),              
 
@@ -133,7 +142,7 @@ class FeedstockResource extends Resource
                     ->sortable(),
                 TextColumn::make('value')
                     ->label('Valor Pago na unidade')
-                    ->numeric()
+                    ->money('brl')
                     ->sortable(),
                 TextColumn::make('created_at')
                     ->dateTime()
