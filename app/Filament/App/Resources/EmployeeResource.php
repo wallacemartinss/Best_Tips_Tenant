@@ -55,20 +55,27 @@ class EmployeeResource extends Resource
                     ->preload(),
                
                 Forms\Components\TextInput::make('document_number')
+                    ->label('CPF')
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('frist_name')
+                    ->label('Primeiro Nome')
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('last_name')
+                    ->label('Último Nome')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\DatePicker::make('brith_date'),
+                Forms\Components\DatePicker::make('brith_date')
+                    ->label('Data de nascimento'),
                 Forms\Components\DatePicker::make('admission_date')
+                    ->label('Data de admissão')
                     ->required(),
                 Forms\Components\TextInput::make('jorney_work')
+                    ->label('Carga Hora')
                     ->required(),
                 Forms\Components\TextInput::make('salary')
+                    ->label('Salário')
                     ->required()
                     ->numeric(),
             ]);
@@ -80,27 +87,38 @@ class EmployeeResource extends Resource
             ->columns([
 
                 Tables\Columns\TextColumn::make('departament.name')
+                    ->label('Departamento')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('work_contract.name')
+                    ->label('Contrato de Trabalho')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('document_number')
+                    ->label('CPF')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('frist_name')
+                    ->label('Primeiro Nome')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('last_name')
+                    ->label('Último Nome')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('brith_date')
-                    ->date()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('admission_date')
-                    ->date()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('jorney_work'),
+                Tables\Columns\TextColumn::make('jorney_work')
+                    ->label('Carga Hora'),
                 Tables\Columns\TextColumn::make('salary')
+                    ->label('Salário')
                     ->numeric()
                     ->sortable(),
+                Tables\Columns\TextColumn::make('brith_date')
+                    ->label('Data de nascimento')
+                    ->date()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('admission_date')
+                    ->label('Data de admissão')
+                    ->date()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

@@ -47,4 +47,8 @@ class Organization extends Model implements HasCurrentTenantLabel
         return $this->hasMany(Departament::class);
     }
 
+    public function feedstocks(): HasMany
+    {
+        return $this->hasMany(Feedstock::class);
+    }
 }
