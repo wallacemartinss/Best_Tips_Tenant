@@ -52,8 +52,8 @@ class AppPanelProvider extends PanelProvider
             'primary' => Color::Amber,
         ])
         ->navigationGroups([
-            'Minha Empresa',
-            'Usuários e Segurança',
+            'Configurações',
+            'Usúarios e Acessos',
             'Cadastros',
         ])
         ->discoverResources(in: app_path('Filament/App/Resources'), for: 'App\\Filament\\App\\Resources')
