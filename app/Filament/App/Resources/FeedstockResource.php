@@ -45,69 +45,67 @@ class FeedstockResource extends Resource
     {
         $tenant = Filament::getTenant();
         $tenant = $tenant->id;
-       
-    return $form
+
+        return $form
             ->schema([
 
                 Fieldset::make('')
-                ->schema([
-                    Select::make('company_id')
-                                ->label('Minha Empresa')    
-                                ->options (Company::where('organization_id', $tenant)->pluck('name', 'id'))
-                                ->searchable()
-                                ->preload()
+                    ->schema([
+                        Select::make('company_id')
+                            ->label('Minha Empresa')
+                            ->options(Company::where('organization_id', $tenant)->pluck('name', 'id'))
+                            ->searchable()
+                            ->preload()
 
-                ])->columns(1),
+                    ])->columns(1),
 
                 Fieldset::make('Dados do Produto')
-                ->schema([
-                    TextInput::make('description')
-                        ->label('Descrição')
-                        ->required()
-                        ->maxLength(255),
+                    ->schema([
+                        TextInput::make('description')
+                            ->label('Descrição')
+                            ->required()
+                            ->maxLength(255),
 
-                    TextInput::make('manufacturer')
-                        ->label('Fabricante')
-                        ->maxLength(255),
-                ]),
+                        TextInput::make('manufacturer')
+                            ->label('Fabricante')
+                            ->maxLength(255),
+                    ]),
 
                 Fieldset::make('Dados da compra')
-                ->schema([
-                    Select::make('units_id')
-                        ->Label('Unidade')
-                        ->relationship(name: 'units', titleAttribute: 'name')
-                        ->searchable()
-                        ->preload()
-                        ->live()
-                        ->afterStateUpdated(function (Set $set) {
-                            $set('mensures_id', null);
-                    })
-                    ->required(),
+                    ->schema([
+                        Select::make('units_id')
+                            ->Label('Unidade')
+                            ->relationship(name: 'units', titleAttribute: 'name')
+                            ->searchable()
+                            ->preload()
+                            ->live()
+                            ->afterStateUpdated(function (Set $set) {
+                                $set('mensures_id', null);
+                            })
+                            ->required(),
 
-                    Select::make('mensures_id')
-                        ->Label('Medida Comprada')
-                        ->options(fn (Get $get): Collection => Mensure::query()->where('unit_id', $get('units_id'))->pluck('simbol', 'id'))
-                        ->searchable()
-                        ->preload()
-                        ->required()
-                        ->live(),
-                        
-                    
+                        Select::make('mensures_id')
+                            ->Label('Medida Comprada')
+                            ->options(fn (Get $get): Collection => Mensure::query()->where('unit_id', $get('units_id'))->pluck('simbol', 'id'))
+                            ->searchable()
+                            ->preload()
+                            ->required()
+                            ->live(),
 
-                    TextInput::make('quantity')
-                        ->label('Quantidade')
-                        ->suffix( function (Get $get) {
-                            $simbol = Mensure::query()->where('id', $get('mensures_id'));
-                            return $simbol->value('simbol');                             
-                        })
-                        ->required()
-                        ->numeric(),
-                    
-                    Money::make('value')
-                        ->label('Valor pago no produto')
-                        ->required(),
+                        TextInput::make('quantity')
+                            ->label('Quantidade')
+                            ->suffix(function (Get $get) {
+                                $simbol = Mensure::query()->where('id', $get('mensures_id'));
+                                return $simbol->value('simbol');
+                            })
+                            ->required()
+                            ->numeric(),
 
-                ]),              
+                        Money::make('value')
+                            ->label('Valor pago no produto')
+                            ->required(),
+
+                    ]),
 
                 TextInput::make('calculate_value')
                     ->numeric(),
@@ -118,7 +116,7 @@ class FeedstockResource extends Resource
     {
         return $table
             ->columns([
-          
+
                 TextColumn::make('description')
                     ->label('Descrição')
                     ->searchable(),
