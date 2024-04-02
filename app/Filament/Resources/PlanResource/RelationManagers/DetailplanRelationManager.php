@@ -7,6 +7,10 @@ use Filament\Tables;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Tables\Columns\IconColumn;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Forms\Components\TextInput;
+use Filament\Tables\Actions\CreateAction;
+use Filament\Tables\Columns\ToggleColumn;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Resources\RelationManagers\RelationManager;
@@ -19,14 +23,14 @@ class DetailplanRelationManager extends RelationManager
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('name')
+                TextInput::make('name')
+                    ->label('Nome')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('description')
+                TextInput::make('description')
+                    ->label('Fwncionalidade')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\Toggle::make('active')
-                    ->required(),
             ]);
     }
 
@@ -35,10 +39,9 @@ class DetailplanRelationManager extends RelationManager
         return $table
             ->recordTitleAttribute('detailplan')
             ->columns([
-                Tables\Columns\TextColumn::make('name'),
-                Tables\Columns\TextColumn::make('description'),
-                Tables\Columns\IconColumn::make('active')
-                    ->boolean(),
+                TextColumn::make('name'),
+                TextColumn::make('description'),
+                ToggleColumn::make('active'),
                 
             ])
             ->filters([

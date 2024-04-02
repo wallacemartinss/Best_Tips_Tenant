@@ -8,7 +8,13 @@ use Filament\Tables;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
+use Filament\Forms\Components\Select;
+use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Forms\Components\TextInput;
+use Filament\Tables\Columns\ToggleColumn;
 use Illuminate\Database\Eloquent\Builder;
+use Leandrocfe\FilamentPtbrFormFields\Money;
 use App\Filament\Resources\PlanResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\PlanResource\RelationManagers;
@@ -32,20 +38,23 @@ class PlanResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('name')
+                TextInput::make('name')
+                    ->label('Nome do Plano')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('description')
+                TextInput::make('description')
+                    ->label('Descrição')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\Toggle::make('active')
+                Select::make('duration')
+                    ->options([
+                        'Mensal' => 'Mensal',
+                        'Trimestral' => 'Trimestral',
+                        'Semestral' => 'Semestral',
+                        'Anual' => 'Anual',
+                    ]),
+                Money::make('value')
                     ->required(),
-                Forms\Components\TextInput::make('value')
-                    ->required()
-                    ->numeric(),
-                Forms\Components\TextInput::make('duration')
-                    ->required()
-                    ->maxLength(255),
             ]);
     }
 
@@ -53,22 +62,25 @@ class PlanResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name')
+                TextColumn::make('name')
+                    ->label('Nome do Plano')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('description')
+                TextColumn::make('description')
+                    ->label('Descrição')
                     ->searchable(),
-                Tables\Columns\IconColumn::make('active')
-                    ->boolean(),
-                Tables\Columns\TextColumn::make('value')
+                ToggleColumn::make('active'),
+                TextColumn::make('value')
                     ->numeric()
+                    ->money('BRL')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('duration')
+                TextColumn::make('duration')
+                    ->label('Duração')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
+                TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
