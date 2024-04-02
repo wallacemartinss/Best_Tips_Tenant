@@ -37,7 +37,6 @@ class DepartamentResource extends Resource
         return $form
             ->schema([
            
-
                 Select::make('sector_id')
                     ->label('Tipo de Setor')
                     ->options(Sector::all()->pluck('name', 'id'))
@@ -50,12 +49,12 @@ class DepartamentResource extends Resource
                     ->searchable()
                     ->preload(),
 
-                Forms\Components\TextInput::make('name')
+                TextInput::make('name')
                     ->label('Tipo de Setor')
                     ->required()
                     ->maxLength(255),
 
-                Forms\Components\TextInput::make('description')
+                TextInput::make('description')
                     ->label('Descrição do Setor')
                     ->maxLength(255),
             

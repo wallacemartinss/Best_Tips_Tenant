@@ -9,4 +9,9 @@ use Filament\Resources\Pages\CreateRecord;
 class CreateFeedstock extends CreateRecord
 {
     protected static string $resource = FeedstockResource::class;
+
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
 }

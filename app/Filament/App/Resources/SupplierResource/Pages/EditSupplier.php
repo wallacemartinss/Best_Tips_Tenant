@@ -16,4 +16,5 @@ class EditSupplier extends EditRecord
             Actions\DeleteAction::make(),
         ];
     }
+
 }
