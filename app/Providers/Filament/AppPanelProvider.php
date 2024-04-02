@@ -53,6 +53,7 @@ class AppPanelProvider extends PanelProvider
         ])
         ->navigationGroups([
             'Configurações',
+            'Mão de Obra',
             'Usúarios e Acessos',
             'Cadastros',
         ])

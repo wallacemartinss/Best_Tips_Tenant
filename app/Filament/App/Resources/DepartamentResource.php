@@ -21,7 +21,7 @@ class DepartamentResource extends Resource
 {
     protected static ?string $model = Departament::class;
     protected static ?string $navigationIcon = 'fas-building-user';
-    protected static ?string $navigationGroup = 'Configurações';
+    protected static ?string $navigationGroup = 'Mão de Obra';
     protected static ?string $navigationLabel = 'Departamentos';
     protected static ?string $modelLabel = 'Departamento';
     protected static ?string $modelLabelPlural = "Departamentos";

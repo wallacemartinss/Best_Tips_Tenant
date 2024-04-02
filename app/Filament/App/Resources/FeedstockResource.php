@@ -68,7 +68,7 @@ class FeedstockResource extends Resource
                             ->maxLength(255),
 
                         TextInput::make('manufacturer')
-                            ->label('Fabricante')
+                            ->label('Fabricante/Marca')
                             ->maxLength(255),
                     ]),
 
@@ -87,7 +87,7 @@ class FeedstockResource extends Resource
 
                         Select::make('mensures_id')
                             ->Label('Medida Comprada')
-                            ->options(fn (Get $get): Collection => Mensure::query()->where('unit_id', $get('units_id'))->pluck('simbol', 'id'))
+                            ->options(fn (Get $get): Collection => Mensure::query()->where('unit_id', $get('units_id'))->pluck('name', 'id'))
                             ->searchable()
                             ->preload()
                             ->required()
@@ -97,7 +97,7 @@ class FeedstockResource extends Resource
                             ->label('Quantidade')
                             ->suffix(function (Get $get) {
                                 $simbol = Mensure::query()->where('id', $get('mensures_id'));
-                                return $simbol->value('simbol');
+                                return $simbol->value('name');
                             })
                             ->required()
                             ->numeric(),
@@ -126,7 +126,7 @@ class FeedstockResource extends Resource
                     ->numeric()
                     ->sortable(),
                 TextColumn::make('manufacturer')
-                    ->label('Fabricante')
+                    ->label('Fabricante/Marca')
                     ->sortable()
                     ->alignCenter()
                     ->searchable(),

@@ -31,7 +31,7 @@ class EmployeeResource extends Resource
     protected static ?string $model = Employee::class;
 
     protected static ?string $navigationIcon = 'fas-user-tie';
-    protected static ?string $navigationGroup = 'Configurações';
+    protected static ?string $navigationGroup = 'Mão de Obra';
     protected static ?string $navigationLabel = 'Funcionários';
     protected static ?string $modelLabel = 'Funcionário';
     protected static ?string $modelLabelPlural = "Funcionários";
