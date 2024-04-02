@@ -8,12 +8,23 @@ use App\Models\Company;
 use App\Models\Employee;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
-use Filament\Facades\Filament;
-use Filament\Resources\Resource;
-use Filament\Forms\Components\Select;
-use App\Filament\App\Resources\EmployeeResource\Pages;
 use App\Models\Departament;
 use App\Models\WorkContract;
+use Filament\Facades\Filament;
+use Filament\Actions\EditAction;
+use Filament\Resources\Resource;
+use Filament\Forms\Components\Select;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\DatePicker;
+use Filament\Tables\Actions\BulkActionGroup;
+use Leandrocfe\FilamentPtbrFormFields\Money;
+use Filament\Tables\Actions\DeleteBulkAction;
+use Leandrocfe\FilamentPtbrFormFields\Document;
+use App\Filament\App\Resources\EmployeeResource\Pages;
+use App\Filament\App\Resources\EmployeeResource\Pages\EditEmployee;
+use App\Filament\App\Resources\EmployeeResource\Pages\ListEmployees;
+use App\Filament\App\Resources\EmployeeResource\Pages\CreateEmployee;
 
 class EmployeeResource extends Resource
 {
@@ -54,30 +65,35 @@ class EmployeeResource extends Resource
                     ->searchable()
                     ->preload(),
                
-                Forms\Components\TextInput::make('document_number')
-                    ->label('CPF')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('frist_name')
+                Document::make('document_number')
+                    ->label('CNPJ ou CPF do prestador de serviço/Colaborador ')
+                    ->dynamic()
+                    ->validation(false)
+                    ->required(),
+
+                TextInput::make('frist_name')
                     ->label('Primeiro Nome')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('last_name')
+
+                TextInput::make('last_name')
                     ->label('Último Nome')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\DatePicker::make('brith_date')
+
+                DatePicker::make('brith_date')
                     ->label('Data de nascimento'),
-                Forms\Components\DatePicker::make('admission_date')
+
+                DatePicker::make('admission_date')
                     ->label('Data de admissão')
                     ->required(),
-                Forms\Components\TextInput::make('jorney_work')
+
+                TextInput::make('jorney_work')
                     ->label('Carga Hora')
                     ->required(),
-                Forms\Components\TextInput::make('salary')
+                Money::make('salary')
                     ->label('Salário')
-                    ->required()
-                    ->numeric(),
+                    ->required(),
             ]);
     }
 
@@ -86,44 +102,44 @@ class EmployeeResource extends Resource
         return $table
             ->columns([
 
-                Tables\Columns\TextColumn::make('departament.name')
+                TextColumn::make('departament.name')
                     ->label('Departamento')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('work_contract.name')
+                TextColumn::make('work_contract.name')
                     ->label('Contrato de Trabalho')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('document_number')
+                TextColumn::make('document_number')
                     ->label('CPF')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('frist_name')
+                TextColumn::make('frist_name')
                     ->label('Primeiro Nome')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('last_name')
+                TextColumn::make('last_name')
                     ->label('Último Nome')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('jorney_work')
+                TextColumn::make('jorney_work')
                     ->label('Carga Hora'),
-                Tables\Columns\TextColumn::make('salary')
+                TextColumn::make('salary')
                     ->label('Salário')
-                    ->numeric()
+                    ->money('brl')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('brith_date')
+                TextColumn::make('brith_date')
                     ->label('Data de nascimento')
                     ->date()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('admission_date')
+                TextColumn::make('admission_date')
                     ->label('Data de admissão')
                     ->date()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
+                TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
