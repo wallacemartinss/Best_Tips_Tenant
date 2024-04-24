@@ -33,3 +33,13 @@ jobs:
         DB_CONNECTION: sqlite
         DB_DATABASE: database/database.sqlite
       run: vendor/bin/phpunit
+
+  Image-build:
+      needs: laravel-tests
+      name: Build image
+      runs-on: ubuntu-latest
+    
+      steps:
+      - uses: actions/checkout@v3
+      - name: Build the Docker image
+        run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
