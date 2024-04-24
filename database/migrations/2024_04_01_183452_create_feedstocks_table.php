@@ -1,22 +1,21 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
+use App\Models\Mensure;
+use App\Models\Organization;
+use App\Models\Unit;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('feedstocks', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('organization_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('company_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('mensures_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('units_id')->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(Organization::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(Mensure::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(Unit::class)->constrained()->cascadeOnDelete();
             $table->string('description');
             $table->string('manufacturer')->nullable();
             $table->double('quantity', 8, 2);
@@ -25,10 +24,6 @@ return new class extends Migration
             $table->timestamps();
         });
     }
-
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('feedstocks');

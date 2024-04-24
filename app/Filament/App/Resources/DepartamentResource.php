@@ -43,12 +43,6 @@ class DepartamentResource extends Resource
                     ->searchable()
                     ->preload(),
 
-                Select::make('company_id')
-                    ->label('Minha Empresa')
-                    ->options(Company::where('organization_id', $tenant)->pluck('name', 'id'))
-                    ->searchable()
-                    ->preload(),
-
                 TextInput::make('name')
                     ->label('Tipo de Setor')
                     ->required()

@@ -46,12 +46,7 @@ class EmployeeResource extends Resource
         return $form
 
             ->schema([
-                Select::make('company_id')
-                    ->label('Minha Empresa')
-                    ->options(Company::where('organization_id', $tenant)->pluck('name', 'id'))
-                    ->searchable()
-                    ->preload(),
-
+               
                 Select::make('departament_id')
                     ->label('Departamento')
                     ->options(Departament::where('organization_id', $tenant)->pluck('name', 'id'))

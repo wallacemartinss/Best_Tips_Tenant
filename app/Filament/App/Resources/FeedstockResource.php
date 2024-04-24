@@ -50,16 +50,6 @@ class FeedstockResource extends Resource
         
             ->schema([
 
-                Fieldset::make('')
-                    ->schema([
-                        Select::make('company_id')
-                            ->label('Minha Empresa')
-                            ->options(Company::where('organization_id', $tenant)->pluck('name', 'id'))
-                            ->searchable()
-                            ->preload()
-
-                    ])->columns(1),
-
                 Fieldset::make('Dados do Produto')
                     ->schema([
                         TextInput::make('description')

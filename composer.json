@@ -12,6 +12,7 @@
         "laravel/tinker": "^2.9",
         "leandrocfe/filament-ptbr-form-fields": "^3.0",
         "owenvoke/blade-fontawesome": "^2.6",
+        "spatie/eloquent-sortable": "^4.2",
         "spatie/laravel-permission": "^6.4"
     },
     "require-dev": {
