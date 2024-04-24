@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('description');
             $table->boolean('active')->default(true);
+            $table->integer('order_column');
             $table->timestamps();
         });
     }

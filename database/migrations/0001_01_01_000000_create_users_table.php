@@ -24,6 +24,7 @@ return new class extends Migration
             $table->json('settings')->nullable();
             $table->boolean('active')->nullable()->default(true);
             $table->string('password');
+            $table->integer('order_column');
             $table->rememberToken();
             $table->timestamps();
         });

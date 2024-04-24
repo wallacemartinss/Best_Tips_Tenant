@@ -2,13 +2,23 @@
 
 namespace App\Models;
 
+use App\Models\Organization;
+use Spatie\EloquentSortable\Sortable;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\EloquentSortable\SortableTrait;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-class Departament extends Model
+
+class Departament extends Model implements Sortable
+
 {
-    use HasFactory;
+    use HasFactory, SortableTrait;
+
+    public $sortable = [
+        'order_column_name' => 'order_column',
+        'sort_when_creating' => true,
+    ];
 
     protected $fillable = [
         'sector_id',

@@ -18,6 +18,7 @@ return new class extends Migration
             $table->boolean('active')->default(true);
             $table->double('value', 8, 2);
             $table->string('duration');
+            $table->integer('order_column');
             $table->timestamps();
         });
     }
