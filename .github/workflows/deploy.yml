@@ -1,10 +1,18 @@
 name: Laravel
 
 on:
+  schedule:
+    - cron: '24 23 * * *'
   push:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
+       
+env:
+  # Use docker.io for Docker Hub if empty
+  REGISTRY: ghcr.io
+  # github.repository as <account>/<repo>
+  IMAGE_NAME: ${{ github.repository }}
 
 jobs:
   laravel-tests:
@@ -87,7 +95,7 @@ jobs:
           with:
             registry: ${{ env.REGISTRY }}
             username: ${{ github.actor }}
-            password: ${{ secrets.GITHUB_TOKEN }}
+            password: ${{ secrets.GITHUBACESS }}
       
         # Extract metadata (tags, labels) for Dockers
         # https://github.com/docker/metadata-action
