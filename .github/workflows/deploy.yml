@@ -48,7 +48,7 @@ jobs:
   Docker-image-upload:
 
         needs: Image-generate
-        name: Build image
+        name: Upload image to DockerHub
       
         runs-on: ubuntu-latest
       
