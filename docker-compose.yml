@@ -10,8 +10,7 @@ services:
     build:
       args:
         user: wallace
-        uid: 1001
-      context: ./
+        uid: 1000
       dockerfile: Dockerfile
     image: wallacemartinss/best_tips_in_business
     working_dir: /var/www/
